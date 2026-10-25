@@ -264,10 +264,7 @@ fn pct(e: &score::Estimate) -> String {
 fn summary(s: &Scores) -> String {
     let mut out = String::new();
     for size in score::SIZES {
-        out += &format!(
-            "| simplification, {size} | {} |\n",
-            pct(&s.simplification[size])
-        );
+        out += &format!("| score, {size} | {} |\n", pct(&s.score[size]));
     }
     out += &format!("| correct | {} |\n", pct(&s.correct));
     out += &format!(
