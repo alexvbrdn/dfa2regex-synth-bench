@@ -13,11 +13,6 @@ use regexsolver::{CharRange, fast_automaton::FastAutomaton, regex::RegularExpres
 #[derive(Clone, Debug)]
 pub struct Row {
     pub id: String,
-    /// The generator (`regex`, `op`, `built`, `enumerated`).
-    pub source: String,
-    /// For `op`: the set operation.
-    #[allow(dead_code)]
-    pub op: Option<String>,
     pub num_states: usize,
     pub num_bases: usize,
     pub accepts: Vec<u16>,
@@ -45,8 +40,6 @@ pub fn read(path: &Path) -> Result<Vec<Row>, Error> {
                 .ok_or_else(|| format!("{}: no column {name}", path.display()))
         };
         let id = col("id")?.as_string::<i32>();
-        let source = col("source")?.as_string::<i32>();
-        let op = col("op")?.as_string::<i32>();
         let num_states = col("num_states")?.as_primitive::<UInt16Type>();
         let num_bases = col("num_bases")?.as_primitive::<UInt8Type>();
         let accepts = col("accepts")?.as_list::<i32>();
@@ -66,8 +59,6 @@ pub fn read(path: &Path) -> Result<Vec<Row>, Error> {
         for i in 0..batch.num_rows() {
             rows.push(Row {
                 id: id.value(i).to_string(),
-                source: source.value(i).to_string(),
-                op: (!op.is_null(i)).then(|| op.value(i).to_string()),
                 num_states: num_states.value(i) as usize,
                 num_bases: num_bases.value(i) as usize,
                 accepts: accepts

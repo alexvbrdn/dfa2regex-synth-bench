@@ -216,9 +216,9 @@ pub fn scores(rows: &[&Row], outcomes: &[&Outcome]) -> Scores {
 }
 
 /// The slices of the report, named after the data's fields: bands of `se_length`, `num_bases`
-/// and `num_states` by fours, `source`, and each combination of states and bases (`16x7`: 16
-/// states, 7 bases).
-pub fn slices(row: &Row) -> [(&'static str, String); 5] {
+/// and `num_states` by fours, and each combination of states and bases (`16x7`: 16 states, 7
+/// bases).
+pub fn slices(row: &Row) -> [(&'static str, String); 4] {
     let band = match row.se_length {
         n if n < 1_000 => "<1k",
         n if n < 10_000 => "1k-10k",
@@ -233,7 +233,6 @@ pub fn slices(row: &Row) -> [(&'static str, String); 5] {
         ("se_length", band.to_string()),
         ("num_bases", block(row.num_bases)),
         ("num_states", block(row.num_states)),
-        ("source", row.source.clone()),
         (
             "num_states x num_bases",
             format!("{}x{}", row.num_states, row.num_bases),
@@ -255,8 +254,6 @@ mod tests {
             + 1;
         Row {
             id: "x".into(),
-            source: "regex".into(),
-            op: None,
             num_states: n,
             num_bases: bases.len(),
             accepts: accepts.to_vec(),
