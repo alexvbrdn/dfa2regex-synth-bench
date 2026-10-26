@@ -39,10 +39,12 @@ pub struct Key {
     pub exact: bool,
 }
 
-/// The minimal DFA of `automaton`, with its minimal spanning set.
+/// The minimal DFA of `automaton`, with its minimal spanning set: the coarsest one its
+/// transitions allow, so the bases depend on the language only, and no transition uses the rest.
 pub fn minimal_dfa(automaton: &FastAutomaton) -> Result<FastAutomaton, Error> {
     let mut dfa = automaton.determinize()?.into_owned();
     dfa.minimize()?;
+    dfa.recompute_minimal_spanning_set()?;
     Ok(dfa)
 }
 
@@ -391,6 +393,18 @@ mod tests {
     fn same_language_different_regexes() {
         assert_eq!(id("(ab|cd)+e"), id("(cd|ab)(ab|cd)*e"));
         assert_eq!(id("a(ba)*"), id("(ab)*a"));
+    }
+
+    #[test]
+    fn bases_covering_every_character() {
+        // A base may hold every character but a few: [^a] is a base like b.
+        assert_eq!(id("[^a]"), id("b"));
+        assert_eq!(id("a[^a]*"), id("ab*"));
+        assert_eq!(id(".*"), id("a*"));
+        // The same from the benchmark's format, where the bases then cover every character.
+        let bases = ["a".to_string(), "[^a]".to_string()];
+        let dfa = crate::data::automaton(2, &[1], &bases, &[(0, 1, vec![0]), (1, 1, vec![1])]);
+        assert_eq!(key(&dfa.unwrap()).unwrap().id, id("ab*"));
     }
 
     #[test]
