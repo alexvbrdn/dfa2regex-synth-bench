@@ -272,10 +272,6 @@ fn summary(s: &Scores) -> String {
         pct(&s.simpler)
     );
     out += &format!(
-        "| complexity saved, when correct and simpler | {} |\n",
-        pct(&s.saving)
-    );
-    out += &format!(
         "| median complexity / state elimination's, when correct | {:.1} |\n",
         100.0 * s.median_complexity_ratio
     );
