@@ -1,6 +1,5 @@
 //! The benchmark's DFA ids: a key of a minimal DFA that does not depend on how its states are
-//! numbered or its bases ordered. This is a copy of the code of the generator that made the
-//! benchmark.
+//! numbered or its bases ordered.
 //!
 //! The automaton is determinized and minimized, and its alphabet split into *bases*: the
 //! coarsest disjoint character classes its transitions are made of (RegexSolver's minimal
@@ -15,8 +14,8 @@
 //!
 //! When more than [`MAX_BASE_PERMUTATIONS`] orders of tied bases would have to be compared,
 //! the ties are broken by the order RegexSolver gives the bases, and the id is not guaranteed
-//! canonical (`exact: false`): two DFAs of the same shape could get different ids. This
-//! happens for about 1 DFA in 2 million from the benchmark's generators.
+//! canonical (`exact: false`): two DFAs of the same shape could get different ids. Every id
+//! of `dev` and `test` is exact.
 
 use regexsolver::fast_automaton::FastAutomaton;
 use xxhash_rust::xxh3::xxh3_128;
