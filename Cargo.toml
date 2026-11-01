@@ -13,7 +13,9 @@ publish = false
 # this version (benchmark version bench-v1).
 regexsolver = "=1.1.0"
 arrow = { version = "56", default-features = false }
-parquet = { version = "56", default-features = false, features = ["arrow", "zstd"] }
+# zstd: the benchmark's files; snap: the default of pyarrow, pandas and datasets, for subsets
+# users write themselves.
+parquet = { version = "56", default-features = false, features = ["arrow", "zstd", "snap"] }
 clap = { version = "4", features = ["derive"] }
 rayon = "1"
 serde = { version = "1", features = ["derive"] }
